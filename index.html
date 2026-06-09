@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>ตารางงานศิลปิน - จุง ดัง ใจดี</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Prompt', 'sans-serif'],
+                    },
+                    colors: {
+                        // สีหลัก
+                        black: '#121212', 
+                        card: '#1E1E1E',
+                        white: '#FFFFFF',
+                        yellow: {
+                            400: '#FACC15',
+                            500: '#EAB308',
+                        },
+                        // สีรอง
+                        green: {
+                            500: '#22C55E', // งานเปิด
+                        },
+                        orange: {
+                            500: '#F97316', // งานปิด
+                        },
+                        blue: {
+                            500: '#3B82F6', // งานกดบัตร
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <style>
+        body {
+            background-color: theme('colors.black');
+            color: theme('colors.white');
+        }
+        /* Custom Scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #121212; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #EAB308; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #FACC15; 
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased flex flex-col items-center pb-12">
+
+    <header class="w-full bg-black border-b border-yellow-500/30 sticky top-0 z-50 shadow-lg shadow-yellow-500/5">
+        <div class="max-w-6xl mx-auto px-4 py-6 flex flex-col md:flex-row justify-between items-center gap-4">
+            <div class="text-center md:text-left">
+                <h1 class="text-3xl md:text-4xl font-bold tracking-wide">
+                    <span class="text-white">EVENT</span> 
+                    <span class="text-yellow-400">SCHEDULE</span>
+                </h1>
+                <p class="text-gray-400 mt-1 text-sm md:text-base">อัปเดตตารางงาน: จุง | ดัง | ใจดี</p>
+            </div>
+            
+            <!-- Quick Stats/Info -->
+            <div class="flex flex-wrap justify-center gap-3 text-sm font-medium">
+                <div class="flex items-center gap-1.5 bg-card px-3 py-1.5 rounded-full border border-gray-700 text-gray-200">
+                    <span class="w-2.5 h-2.5 rounded-full bg-green-500"></span> งานเปิด
+                </div>
+                <div class="flex items-center gap-1.5 bg-card px-3 py-1.5 rounded-full border border-gray-700 text-gray-200">
+                    <span class="w-2.5 h-2.5 rounded-full bg-orange-500"></span> งานปิด
+                </div>
+            </div>
+        </div>
+    </header>
+
+    <main class="w-full max-w-6xl mx-auto px-4 mt-8 flex-1">
+        
+        <!-- Filters -->
+        <section class="bg-card p-5 rounded-2xl border border-gray-800 shadow-xl mb-8">
+            <div class="flex flex-col md:flex-row gap-6">
+                <!-- Artist Filter -->
+                <div class="flex-1">
+                    <h3 class="text-yellow-400 font-semibold mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M10 9a3 3 0 100-6 3 3 0 000 6zm-7 9a7 7 0 1114 0H3z" clip-rule="evenodd" />
+                        </svg>
+                        เลือกศิลปิน
+                    </h3>
+                    <div class="flex flex-wrap gap-2" id="artist-filters">
+                        <button onclick="setArtistFilter('All')" class="filter-btn active px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-yellow-500 bg-yellow-500 text-black hover:bg-yellow-400">ทั้งหมด</button>
+                        <button onclick="setArtistFilter('จุง')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-gray-600 text-gray-300 hover:border-yellow-500 hover:text-yellow-400">จุง</button>
+                        <button onclick="setArtistFilter('ดัง')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-gray-600 text-gray-300 hover:border-yellow-500 hover:text-yellow-400">ดัง</button>
+                        <button onclick="setArtistFilter('ใจดี')" class="filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-gray-600 text-gray-300 hover:border-yellow-500 hover:text-yellow-400">ใจดี</button>
+                    </div>
+                </div>
+
+                <!-- Event Type Filter -->
+                <div class="flex-1">
+                    <h3 class="text-yellow-400 font-semibold mb-3 flex items-center gap-2">
+                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 20 20" fill="currentColor">
+                            <path fill-rule="evenodd" d="M5 2a1 1 0 011 1v1h1a1 1 0 010 2H6v1a1 1 0 01-2 0V6H3a1 1 0 010-2h1V3a1 1 0 011-1zm0 10a1 1 0 011 1v1h1a1 1 0 110 2H6v1a1 1 0 11-2 0v-1H3a1 1 0 110-2h1v-1a1 1 0 011-1zm7-10a1 1 0 01.707.293l3 3a1 1 0 010 1.414l-3 3a1 1 0 01-1.414-1.414L13.586 6l-2.293-2.293A1 1 0 0112 2z" clip-rule="evenodd" />
+                        </svg>
+                        ประเภทงาน
+                    </h3>
+                    <div class="flex flex-wrap gap-2" id="type-filters">
+                        <button onclick="setTypeFilter('All')" class="filter-type-btn active px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-yellow-500 bg-yellow-500 text-black hover:bg-yellow-400">ทั้งหมด</button>
+                        <button onclick="setTypeFilter('Open')" class="filter-type-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-gray-600 text-gray-300 hover:border-green-500 hover:text-green-400">งานเปิด</button>
+                        <button onclick="setTypeFilter('Closed')" class="filter-type-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-gray-600 text-gray-300 hover:border-orange-500 hover:text-orange-400">งานปิด</button>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Event List (ปรับสไตล์ grid ให้เหมาะสมสำหรับแสดงผลการ์ดแนวนอน) -->
+        <div id="events-container" class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+            <!-- Event cards will be injected here by JavaScript -->
+        </div>
+
+        <!-- No Results Message -->
+        <div id="no-results" class="hidden text-center py-12">
+            <svg xmlns="http://www.w3.org/2000/svg" class="h-16 w-16 mx-auto text-gray-600 mb-4" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9.172 16.172a4 4 0 015.656 0M9 10h.01M15 10h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+            </svg>
+            <p class="text-xl text-gray-400">คิดถึงจัง จะได้เจอกันอีกเมื่อไหร่เนี่ย</p>
+        </div>
+
+    </main>
+
+    <script>
+        // Mock Data ตารางงาน (อัปเดตใหม่ตามที่ระบุ)
+        // เพื่อป้องกันปัญหาภาพเสีย จึงใช้รูปวาดเรขาคณิต (SVG) หรือภาพจำลองคุณภาพสูงสีสันพรีเมียมคู่กับประเภทงานแต่ละประเภท
+        const events = [
+            { 
+                id: 1, 
+                date: "10 มิ.ย. 2026", 
+                time: "18:00 น.", 
+                title: "Glow Closer by Lonark", 
+                location: "-", 
+                type: "Closed", 
+                artists: ["จุง"], 
+                note: "งานปิดเฉพาะผู้ร่วมกิจกรรมเท่านั้น",
+                image: "images/10lonark.jpg"
+            },
+            { 
+                id: 2, 
+                date: "11 มิ.ย. 2026", 
+                time: "19:00 น.", 
+                title: "Burberry Summer", 
+                location: "The Standard, Bangkok Mahanakhon", 
+                type: "Closed", 
+                artists: ["จุง"], 
+                note: "แฟน ๆ สามารถให้กำลังใจบริเวณรอบงานได้ (พื้นที่มีจำกัด)",
+                image: "images/11bbr.jpg"
+            },
+            { 
+                id: 3, 
+                date: "13 มิ.ย. 2026", 
+                time: "19:00 น.", 
+                title: "GMMTV FANDAY 31", 
+                location: "ZEPP NEW TAIPEI", 
+                type: "Ticketed", 
+                artists: ["จุง", "ดัง"], 
+                note: "",
+                image: "images/13fanday.jpg"
+            },
+            { 
+                id: 4, 
+                date: "20-21 มิ.ย. 2026", 
+                time: "2 days, 1 night trip", 
+                title: "Garnier, Mochi I Miss You Joong Trip", 
+                location: "Samui", 
+                type: "Closed", 
+                artists: ["จุง"], 
+                note: "งานปิดเฉพาะผู้ร่วมกิจกรรมเท่านั้น",
+                image: "images/2021Garnier.jpg"
+            }
+        ];
+
+        // State สำหรับการกรองข้อมูล
+        let currentArtistFilter = 'All';
+        let currentTypeFilter = 'All';
+
+        // ฟังก์ชันกำหนดสีของป้ายประเภทงาน
+        const getTypeBadge = (type) => {
+            if(type === 'Open') return `<span class="bg-green-500/20 text-green-500 border border-green-500/50 px-2.5 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-green-500"></span> งานเปิด</span>`;
+            if(type === 'Closed') return `<span class="bg-orange-500/20 text-orange-500 border border-orange-500/50 px-2.5 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-orange-500"></span> งานปิด</span>`;
+            //if(type === 'Ticketed') return `<span class="bg-blue-500/20 text-blue-400 border border-blue-500/50 px-2.5 py-1 rounded-md text-xs font-semibold flex items-center gap-1.5"><span class="w-1.5 h-1.5 rounded-full bg-blue-500"></span> งานกดบัตร</span>`;
+            return '';
+        };
+
+        // ฟังก์ชันสร้างป้ายชื่อศิลปิน (ใช้สีเหลือง/ทองหลัก เพื่อความพรีเมียมและลงตัวเข้ากับเว็บ)
+        const getArtistTags = (artists) => {
+            return artists.map(artist => 
+                `<span class="bg-yellow-500/10 text-yellow-400 border border-yellow-500/20 px-3 py-1 rounded-full text-sm font-medium">#${artist}</span>`
+            ).join('');
+        };
+
+        // ฟังก์ชัน Render การ์ด
+        const renderEvents = () => {
+            const container = document.getElementById('events-container');
+            const noResults = document.getElementById('no-results');
+            
+            // กรองข้อมูล
+            const filteredEvents = events.filter(event => {
+                const matchArtist = currentArtistFilter === 'All' || event.artists.includes(currentArtistFilter);
+                const matchType = currentTypeFilter === 'All' || event.type === currentTypeFilter;
+                return matchArtist && matchType;
+            });
+
+            // เคลียร์เนื้อหาเก่า
+            container.innerHTML = '';
+
+            if (filteredEvents.length === 0) {
+                container.classList.add('hidden');
+                noResults.classList.remove('hidden');
+            } else {
+                container.classList.remove('hidden');
+                noResults.classList.add('hidden');
+
+                // สร้างการ์ดใหม่แบบแนวนอน (แบ่งฝั่งซ้ายเป็นภาพ ฝั่งขวาเป็นรายละเอียดข้อมูล)
+                filteredEvents.forEach(event => {
+                    const card = document.createElement('div');
+                    card.className = "bg-card rounded-2xl overflow-hidden border border-gray-800 hover:border-yellow-500/50 transition-all duration-300 hover:-translate-y-1 shadow-lg hover:shadow-yellow-500/10 flex flex-col sm:flex-row h-full group";
+                    
+                    card.innerHTML = `
+                        <!-- ฝั่งซ้าย: รูปภาพใบปลิวงานอีเวนต์ -->
+                        <div class="w-full sm:w-1/3 md:w-2/5 min-h-[220px] sm:min-h-full relative overflow-hidden bg-gray-900 shrink-0">
+                            <img src="${event.image}" alt="${event.title}" class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" onerror="this.onerror=null; this.src='https://images.unsplash.com/photo-1492684223066-81342ee5ff30?auto=format&fit=crop&w=600&q=80';">
+                            <div class="absolute inset-0 bg-gradient-to-t sm:bg-gradient-to-r from-black/80 sm:from-transparent to-transparent"></div>
+                        </div>
+
+                        <!-- ฝั่งขวา: รายละเอียดของงาน -->
+                        <div class="flex-1 p-6 flex flex-col justify-between">
+                            <!-- ส่วนเนื้อหาด้านบน -->
+                            <div class="flex-1 flex flex-col">
+                                <div class="flex justify-between items-start mb-3 gap-2">
+                                    ${getTypeBadge(event.type)}
+                                    <span class="text-yellow-400 font-semibold bg-yellow-400/10 px-3 py-1 rounded-lg text-sm shrink-0">${event.date}</span>
+                                </div>
+                                
+                                <h2 class="text-xl font-bold text-white mb-3 group-hover:text-yellow-400 transition-colors line-clamp-2">${event.title}</h2>
+                                
+                                <div class="space-y-2 mb-4">
+                                    <div class="flex items-start gap-2 text-gray-400 text-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4l3 3m6-3a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                        </svg>
+                                        <span>${event.time}</span>
+                                    </div>
+                                    <div class="flex items-start gap-2 text-gray-400 text-sm">
+                                        <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 text-gray-500 shrink-0" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M17.657 16.657L13.414 20.9a1.998 1.998 0 01-2.827 0l-4.244-4.243a8 8 0 1111.314 0z" />
+                                            <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 11a3 3 0 11-6 0 3 3 0 016 0z" />
+                                        </svg>
+                                        <span>${event.location}</span>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- ส่วนหมายเหตุ (ควบคุมความสูงเสมอกันทุกการ์ด min-h-[76px]) -->
+                            <div class="mb-4">
+                                ${event.note ? `
+                                <div class="flex items-start gap-2 text-yellow-500/90 text-sm bg-yellow-500/10 p-2.5 rounded-lg border border-yellow-500/20 min-h-[76px]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 text-yellow-500 mt-0.5" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M13 16h-1v-4h-1m1-4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z" />
+                                    </svg>
+                                    <span class="line-clamp-2"><strong>หมายเหตุ:</strong> ${event.note}</span>
+                                </div>
+                                ` : `
+                                <div class="flex items-center gap-2 text-gray-600 text-sm bg-gray-900/10 p-2.5 rounded-lg border border-dashed border-gray-800/60 min-h-[76px]">
+                                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5 shrink-0 text-gray-700" fill="none" viewBox="0 0 24 24" stroke="currentColor">
+                                        <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M18.364 18.364A9 9 0 005.636 5.636m12.728 12.728A9 9 0 015.636 5.636m12.728 12.728L5.636 5.636" />
+                                    </svg>
+                                    <span class="italic text-gray-500">ไม่มีหมายเหตุเพิ่มเติม</span>
+                                </div>
+                                `}
+                            </div>
+
+                            <!-- ส่วนท้ายของการ์ด: รายชื่อศิลปิน -->
+                            <div class="pt-4 border-t border-gray-800 flex flex-wrap gap-2">
+                                ${getArtistTags(event.artists)}
+                            </div>
+                        </div>
+                    `;
+                    container.appendChild(card);
+                });
+            }
+        };
+
+        // ฟังก์ชันจัดการปุ่มกด กรองศิลปิน
+        window.setArtistFilter = (artist) => {
+            currentArtistFilter = artist;
+            
+            // อัปเดต UI ของปุ่ม
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                if (btn.innerText.trim() === artist || (artist === 'All' && btn.innerText.trim() === 'ทั้งหมด')) {
+                    btn.className = "filter-btn active px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-yellow-500 bg-yellow-500 text-black hover:bg-yellow-400";
+                } else {
+                    btn.className = "filter-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-gray-600 text-gray-300 hover:border-yellow-500 hover:text-yellow-400";
+                }
+            });
+            
+            renderEvents();
+        };
+
+        // ฟังก์ชันจัดการปุ่มกด กรองประเภทงาน
+        window.setTypeFilter = (type) => {
+            currentTypeFilter = type;
+            
+            // อัปเดต UI ของปุ่ม
+            const buttons = document.querySelectorAll('.filter-type-btn');
+            buttons.forEach(btn => {
+                let isActive = false;
+                if (type === 'All' && btn.innerText.trim() === 'ทั้งหมด') isActive = true;
+                if (type === 'Open' && btn.innerText.trim() === 'งานเปิด') isActive = true;
+                if (type === 'Closed' && btn.innerText.trim() === 'งานปิด') isActive = true;
+                //if (type === 'Ticketed' && btn.innerText.trim() === 'งานกดบัตร') isActive = true;
+
+                if (isActive) {
+                    btn.className = "filter-type-btn active px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-yellow-500 bg-yellow-500 text-black hover:bg-yellow-400";
+                } else {
+                    let hoverClass = '';
+                    if (btn.innerText.trim() === 'งานเปิด') hoverClass = 'hover:border-green-500 hover:text-green-400';
+                    else if (btn.innerText.trim() === 'งานปิด') hoverClass = 'hover:border-orange-500 hover:text-orange-400';
+                    //else if (btn.innerText.trim() === 'งานกดบัตร') hoverClass = 'hover:border-blue-500 hover:text-blue-400';
+                    else hoverClass = 'hover:border-yellow-500 hover:text-yellow-400';
+                    
+                    // Default unselected state
+                    btn.className = `filter-type-btn px-4 py-2 rounded-full text-sm font-medium transition-all duration-300 border border-gray-600 text-gray-300 ${hoverClass}`;
+                }
+            });
+            
+            renderEvents();
+        };
+
+        // Initial render เมื่อโหลดหน้าเว็บ
+        renderEvents();
+    </script>
+</body>
+</html>
