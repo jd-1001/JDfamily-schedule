@@ -5,6 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JD Event Schedule</title>
     <script src="https://cdn.tailwindcss.com"></script>
+      <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.3.2/papaparse.min.js"></script>
     <link href="https://fonts.googleapis.com/css2?family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <script>
         tailwind.config = {
@@ -143,19 +144,8 @@
         // Mock Data ตารางงาน (อัปเดตใหม่ตามที่ระบุ)
         // เพื่อป้องกันปัญหาภาพเสีย จึงใช้รูปวาดเรขาคณิต (SVG) หรือภาพจำลองคุณภาพสูงสีสันพรีเมียมคู่กับประเภทงานแต่ละประเภท
         const events = [
-              { 
-                id: 1, 
-                date: "20-21 มิ.ย. 2026", 
-                time: "2 days, 1 night trip", 
-                title: "Garnier, Mochi I Miss You Joong Trip", 
-                location: "Samui", 
-                type: "Closed", 
-                artists: ["จุง"], 
-                note: "งานปิดเฉพาะผู้ร่วมกิจกรรมเท่านั้น",
-                image: "images/2021Garnier.jpg"
-            },
              { 
-                id: 2, 
+                id: 1, 
                 date: "11 ก.ค. 2026", 
                 time: "-", 
                 title: "DunkFSRICHwithDUNK", 
@@ -166,7 +156,7 @@
                 image: "images/1107Dunk.jpg"
             },
             { 
-                id: 3, 
+                id: 2, 
                 date: "12 ก.ค. 2026", 
                 time: "-", 
                 title: "JoongFSLUCKYwithJOONG", 
@@ -175,6 +165,21 @@
                 artists: ["จุง"], 
                 note: "",
                 image: "images/1207Joong.jpg"
+            },
+             { 
+                id: 3, 
+                date: "16 ก.ค. 2026", 
+                time: "18.00 น.", 
+                title: "#SFFriendsScreening ", 
+                location: "SFW เซ็นทรัลเวิลด์ โรงภาพยนตร์ WORLD MAX CINEMA", 
+                type: "Ticketed", 
+                artists: ["จุง","ดัง"], 
+                note: "🔊เปิดขายบัตรวันที่ 5 กรกฎาคม 69
+📍เวลา 12.00 น. 
+จำหน่ายบัตรผ่านช่องทาง COUNTER SERVICE ร้าน 7-ELEVEN
+📲เวลา 14.00 น. 
+จำหน่ายบัตรผ่านช่องทาง 'http://ALLTICKET.COM'",
+                image: "images/1607.jpg"
             },
             { 
                 id: 4, 
